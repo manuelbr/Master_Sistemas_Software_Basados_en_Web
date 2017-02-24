@@ -36,6 +36,13 @@ def holaMundoHtml():
     respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
     return respuesta
 
+    #Versión del profesor
+    #usuarios = []
+    #usuarios.append({'name':'Pepe','dni':'123456'})
+    #usuarios.append({'name':'Paco','dni':'123456'})
+    #usuarios.append({'name':'','dni':'123456'})
+    #return render_template('hello.html',var='esto',usuarios=usuarios)
+
 #Devuelve una imagen para visualizarla en el navegador
 @app.route('/una_imagen')
 def holaMundoImagen():
