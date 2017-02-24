@@ -10,4 +10,4 @@ importando el módulo Response y haciendo: 'respuesta = Response()'.
 * El mecanismo de sesiones se hace con el módulo 'session', que utiliza persistencia y cookies para almacenar los usuarios que han hecho login.
 * La notación de jinjer es sólo para utilizar variables, bucles y bloques que las utilicen. No es necesario incluirlas en los templates.
 * En herencia, se usa {% block content %} {% endcontent %} para establecer que el trozo de código que hay entre esas dos partes se reutilizará, y usamos {% extends 'nombre.html' %} en el html hijo para decir que vas a utilizar el código que se ha especificado en el padre que puede heredarse. Por ejemplo si en el padre se ha puesto {%  %}
-* Se usa url_for dentro de los href o imagenes dentro de las plantillas html para poder invocar contenido estático del directorio que le especifiquemos con el url_for. 
+* Se usa url_for dentro de los href o imagenes dentro de las plantillas html para poder invocar contenido estático del directorio que le especifiquemos con el url_for. Se usa dentro de los html para invocar cosas estáticas como imágenes. <img src="{% url_for('static',filename='img/nombre.jpg') %}">
