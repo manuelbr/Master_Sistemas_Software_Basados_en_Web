@@ -44,6 +44,13 @@ def holaMundoImagen():
     respuesta.headers['Content-Type'] = 'image/jpg'
     return respuesta
 
+    #Forma alternativa del profesor
+    #f = open(filename)
+    #imagen = f.read()
+    #f.close()
+    #respuesta = make_response(imagen)
+    #return respuesta
+
 #Devuelve en texto plano aquello que escribimos a partir de 'este_texto_plano'
 @app.route('/este_texto_plano/<parametro>')
 def returnParametro(parametro):
@@ -57,3 +64,7 @@ def page_not_found(e):
     respuesta = make_response(render_template('error.html'), 404)
     respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
     return respuesta
+
+#Se utiliza para importar el módulo
+if __name__ == '__main__':
+    app.run(host='0.0.0.0',debug=True)
