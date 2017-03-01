@@ -63,7 +63,7 @@ def logout():
 #Página de error
 @app.errorhandler(404)
 def page_not_found(e):
-    respuesta = make_response(render_template('error.html'), 404)
+    respuesta = make_response(render_template('error.html', titulo="Se ha producido un error",contenido=e), 404)
     respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
     return respuesta
 
