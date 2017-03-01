@@ -7,11 +7,14 @@
 
   <div class="container">
 
-      {% block enlaces %}
-          <li class="active"><a href="/muestraTexto">Mostrar Texto</a></li>
-          <li><a href="/muestraImagen">Mostrar Imagen</a></li>
-          <li><a href="/logout">Logout</a></li>
-      {% endblock %}
+      {% if error == "no" %}
+        {% block enlaces %}
+            <li class="active"><a href="/muestraTexto?error=no">Mostrar Texto</a></li>
+            <li><a href="/muestraImagen">Mostrar Imagen</a></li>
+            <li><a href="/logout">Logout</a></li>
+        {% endblock %}
+      {% endif %}
+
 
       {% block contenido %}
       <!-- Jumbotron -->

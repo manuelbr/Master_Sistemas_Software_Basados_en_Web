@@ -41,9 +41,15 @@ def principal(user):
     return respuesta
 
 #Página que muestra un texto y hereda de la principal
-@app.route('/muestraTexto')
-def muestraTexto():
-    respuesta = make_response(render_template('muestraTexto.html',user=session['user'],titulo='Esto es un título',contenido='Esto es una línea de texto plano'))
+@app.route('/muestraTexto/<error>/')
+def muestraTexto(error):
+    sentinel = request.args.get('error')
+
+    if sentinel == 'no':
+        respuesta = make_response(render_template('muestraTexto.html',user=session['user'],titulo='Esto es un título',contenido='Esto es una línea de texto plano'))
+    else:
+        respuesta = make_response(render_template('muestraTexto.html',user='ERROR',titulo='Ha ocurrido un error',contenido=error))
+
     respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
     return respuesta
 
@@ -63,9 +69,7 @@ def logout():
 #Página de error
 @app.errorhandler(404)
 def page_not_found(e):
-    respuesta = make_response(render_template('error.html', titulo="Se ha producido un error",contenido=e), 404)
-    respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
-    return respuesta
+    return muestraTexto(e)
 
 #Se utiliza para importar el módulo
 if __name__ == '__main__':
