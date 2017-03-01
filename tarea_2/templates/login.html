@@ -1,61 +1,57 @@
 <!DOCTYPE html>
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>http://getbootstrap.com/examples/signin/</title><link rel="stylesheet" type="text/css" href="login_files/viewsource.css"></head><body id="viewsource" class="highlight" style="-moz-tab-size: 4" contextmenu="actions"><pre id="line1"><span></span><span class="doctype">&lt;!DOCTYPE html&gt;</span><span>
-<span id="line2"></span></span><span>&lt;<span class="start-tag">html</span> <span class="attribute-name">lang</span>="<a class="attribute-value">en</a>"&gt;</span><span>
-<span id="line3"></span>  </span><span>&lt;<span class="start-tag">head</span>&gt;</span><span>
-<span id="line4"></span>    </span><span>&lt;<span class="start-tag">meta</span> <span class="attribute-name">charset</span>="<a class="attribute-value">utf-8</a>"&gt;</span><span>
-<span id="line5"></span>    </span><span>&lt;<span class="start-tag">meta</span> <span class="attribute-name">http-equiv</span>="<a class="attribute-value">X-UA-Compatible</a>" <span class="attribute-name">content</span>="<a class="attribute-value">IE=edge</a>"&gt;</span><span>
-<span id="line6"></span>    </span><span>&lt;<span class="start-tag">meta</span> <span class="attribute-name">name</span>="<a class="attribute-value">viewport</a>" <span class="attribute-name">content</span>="<a class="attribute-value">width=device-width, initial-scale=1</a>"&gt;</span><span>
-<span id="line7"></span>    </span><span class="comment">&lt;!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags --&gt;</span><span>
-<span id="line8"></span>    </span><span>&lt;<span class="start-tag">meta</span> <span class="attribute-name">name</span>="<a class="attribute-value">description</a>" <span class="attribute-name">content</span>="<a class="attribute-value"></a>"&gt;</span><span>
-<span id="line9"></span>    </span><span>&lt;<span class="start-tag">meta</span> <span class="attribute-name">name</span>="<a class="attribute-value">author</a>" <span class="attribute-name">content</span>="<a class="attribute-value"></a>"&gt;</span><span>
-<span id="line10"></span>    </span><span>&lt;<span class="start-tag">link</span> <span class="attribute-name">rel</span>="<a class="attribute-value">icon</a>" <span class="attribute-name">href</span>="<a class="attribute-value" href="view-source:http://getbootstrap.com/favicon.ico">../../favicon.ico</a>"&gt;</span><span>
-<span id="line11"></span>
-<span id="line12"></span>    </span><span>&lt;<span class="start-tag">title</span>&gt;</span><span>Signin Template for Bootstrap</span><span>&lt;/<span class="end-tag">title</span>&gt;</span><span>
-<span id="line13"></span>
-<span id="line14"></span>    </span><span class="comment">&lt;!-- Bootstrap core CSS --&gt;</span><span>
-<span id="line15"></span>    </span><span>&lt;<span class="start-tag">link</span> <span class="attribute-name">href</span>="<a class="attribute-value" href="view-source:http://getbootstrap.com/dist/css/bootstrap.min.css">../../dist/css/bootstrap.min.css</a>" <span class="attribute-name">rel</span>="<a class="attribute-value">stylesheet</a>"&gt;</span><span>
-<span id="line16"></span>
-<span id="line17"></span>    </span><span class="comment">&lt;!-- IE10 viewport hack for Surface/desktop Windows 8 bug --&gt;</span><span>
-<span id="line18"></span>    </span><span>&lt;<span class="start-tag">link</span> <span class="attribute-name">href</span>="<a class="attribute-value" href="view-source:http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css">../../assets/css/ie10-viewport-bug-workaround.css</a>" <span class="attribute-name">rel</span>="<a class="attribute-value">stylesheet</a>"&gt;</span><span>
-<span id="line19"></span>
-<span id="line20"></span>    </span><span class="comment">&lt;!-- Custom styles for this template --&gt;</span><span>
-<span id="line21"></span>    </span><span>&lt;<span class="start-tag">link</span> <span class="attribute-name">href</span>="<a class="attribute-value" href="view-source:http://getbootstrap.com/examples/signin/signin.css">signin.css</a>" <span class="attribute-name">rel</span>="<a class="attribute-value">stylesheet</a>"&gt;</span><span>
-<span id="line22"></span>
-<span id="line23"></span>    </span><span class="comment">&lt;!-- Just for debugging purposes. Don't actually copy these 2 lines! --&gt;</span><span>
-<span id="line24"></span>    </span><span class="comment">&lt;!--[if lt IE 9]&gt;&lt;script src="../../assets/js/ie8-responsive-file-warning.js"&gt;&lt;/script&gt;&lt;![endif]--&gt;</span><span>
-<span id="line25"></span>    </span><span>&lt;<span class="start-tag">script</span> <span class="attribute-name">src</span>="<a class="attribute-value" href="view-source:http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js">../../assets/js/ie-emulation-modes-warning.js</a>"&gt;</span><span></span><span>&lt;/<span class="end-tag">script</span>&gt;</span><span>
-<span id="line26"></span>
-<span id="line27"></span>    </span><span class="comment">&lt;!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --&gt;</span><span>
-<span id="line28"></span>    </span><span class="comment">&lt;!--[if lt IE 9]&gt;
-<span id="line29"></span>      &lt;script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"&gt;&lt;/script&gt;
-<span id="line30"></span>      &lt;script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"&gt;&lt;/script&gt;
-<span id="line31"></span>    &lt;![endif]--&gt;</span><span>
-<span id="line32"></span>  </span><span>&lt;/<span class="end-tag">head</span>&gt;</span><span>
-<span id="line33"></span>
-<span id="line34"></span>  </span><span>&lt;<span class="start-tag">body</span>&gt;</span><span>
-<span id="line35"></span>
-<span id="line36"></span>    </span><span>&lt;<span class="start-tag">div</span> <span class="attribute-name">class</span>="<a class="attribute-value">container</a>"&gt;</span><span>
-<span id="line37"></span>
-<span id="line38"></span>      </span><span>&lt;<span class="start-tag">form</span> <span class="attribute-name">class</span>="<a class="attribute-value">form-signin</a>"&gt;</span><span>
-<span id="line39"></span>        </span><span>&lt;<span class="start-tag">h2</span> <span class="attribute-name">class</span>="<a class="attribute-value">form-signin-heading</a>"&gt;</span><span>Please sign in</span><span>&lt;/<span class="end-tag">h2</span>&gt;</span><span>
-<span id="line40"></span>        </span><span>&lt;<span class="start-tag">label</span> <span class="attribute-name">for</span>="<a class="attribute-value">inputEmail</a>" <span class="attribute-name">class</span>="<a class="attribute-value">sr-only</a>"&gt;</span><span>Email address</span><span>&lt;/<span class="end-tag">label</span>&gt;</span><span>
-<span id="line41"></span>        </span><span>&lt;<span class="start-tag">input</span> <span class="attribute-name">type</span>="<a class="attribute-value">email</a>" <span class="attribute-name">id</span>="<a class="attribute-value">inputEmail</a>" <span class="attribute-name">class</span>="<a class="attribute-value">form-control</a>" <span class="attribute-name">placeholder</span>="<a class="attribute-value">Email address</a>" <span class="attribute-name">required</span> <span class="attribute-name">autofocus</span>&gt;</span><span>
-<span id="line42"></span>        </span><span>&lt;<span class="start-tag">label</span> <span class="attribute-name">for</span>="<a class="attribute-value">inputPassword</a>" <span class="attribute-name">class</span>="<a class="attribute-value">sr-only</a>"&gt;</span><span>Password</span><span>&lt;/<span class="end-tag">label</span>&gt;</span><span>
-<span id="line43"></span>        </span><span>&lt;<span class="start-tag">input</span> <span class="attribute-name">type</span>="<a class="attribute-value">password</a>" <span class="attribute-name">id</span>="<a class="attribute-value">inputPassword</a>" <span class="attribute-name">class</span>="<a class="attribute-value">form-control</a>" <span class="attribute-name">placeholder</span>="<a class="attribute-value">Password</a>" <span class="attribute-name">required</span>&gt;</span><span>
-<span id="line44"></span>        </span><span>&lt;<span class="start-tag">div</span> <span class="attribute-name">class</span>="<a class="attribute-value">checkbox</a>"&gt;</span><span>
-<span id="line45"></span>          </span><span>&lt;<span class="start-tag">label</span>&gt;</span><span>
-<span id="line46"></span>            </span><span>&lt;<span class="start-tag">input</span> <span class="attribute-name">type</span>="<a class="attribute-value">checkbox</a>" <span class="attribute-name">value</span>="<a class="attribute-value">remember-me</a>"&gt;</span><span> Remember me
-<span id="line47"></span>          </span><span>&lt;/<span class="end-tag">label</span>&gt;</span><span>
-<span id="line48"></span>        </span><span>&lt;/<span class="end-tag">div</span>&gt;</span><span>
-<span id="line49"></span>        </span><span>&lt;<span class="start-tag">button</span> <span class="attribute-name">class</span>="<a class="attribute-value">btn btn-lg btn-primary btn-block</a>" <span class="attribute-name">type</span>="<a class="attribute-value">submit</a>"&gt;</span><span>Sign in</span><span>&lt;/<span class="end-tag">button</span>&gt;</span><span>
-<span id="line50"></span>      </span><span>&lt;/<span class="end-tag">form</span>&gt;</span><span>
-<span id="line51"></span>
-<span id="line52"></span>    </span><span>&lt;/<span class="end-tag">div</span>&gt;</span><span> </span><span class="comment">&lt;!-- /container --&gt;</span><span>
-<span id="line53"></span>
-<span id="line54"></span>
-<span id="line55"></span>    </span><span class="comment">&lt;!-- IE10 viewport hack for Surface/desktop Windows 8 bug --&gt;</span><span>
-<span id="line56"></span>    </span><span>&lt;<span class="start-tag">script</span> <span class="attribute-name">src</span>="<a class="attribute-value" href="view-source:http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js">../../assets/js/ie10-viewport-bug-workaround.js</a>"&gt;</span><span></span><span>&lt;/<span class="end-tag">script</span>&gt;</span><span>
-<span id="line57"></span>  </span><span>&lt;/<span class="end-tag">body</span>&gt;</span><span>
-<span id="line58"></span></span><span>&lt;/<span class="end-tag">html</span>&gt;</span><span>
-<span id="line59"></span></span></pre><menu type="context" id="actions"><menuitem id="goToLine" label="Ir a la línea…" accesskey="x"></menuitem><menuitem id="wrapLongLines" label="Ajustar líneas largas" type="checkbox"></menuitem><menuitem id="highlightSyntax" label="Resaltar sintaxis" type="checkbox" checked="true"></menuitem></menu></body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <form class="form-signin" action="/principal" method="POST">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" name="pass" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

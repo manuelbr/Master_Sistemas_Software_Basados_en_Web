@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, make_response, send_file
+from flask import Flask, render_template, make_response, send_file, request, session
 import sys
 
 #Especifico el nombre y la localización de la carpeta de recursos estáticos
@@ -16,10 +16,25 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 #Página índice por defecto
-@app.route('/')
-def index():
-    respuesta = make_response('Hola, esta es la página índice')
-    respuesta.headers['Content-Type'] = 'text/plain; charset=utf-8'
+@app.route('/',methods=['GET', 'POST'])
+def login():
+    if 'email' in session:
+        #Si ya hay una sesión iniciada, se redirige a la página principal para que se le de la bienvenida
+        return principal(email=session['email'])
+    elif request.method == 'POST':
+        #Si se reciben los datos de email desde un login anterior, se envian a la página principal y además se registra en la sesión
+        session['email'] = request.form['email']
+        return principal(email=request.form['email'])
+    else:
+        respuesta = make_response(render_template('login.html'))
+        respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
+        return respuesta
+
+#Página principal que da la bienvenida al usuario
+@app.route('/principal')
+def principal(email):
+    respuesta = make_response(render_template('principal.html',email=email))
+    respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
     return respuesta
 
 #Devuelve un texto plano
