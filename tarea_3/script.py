@@ -105,8 +105,15 @@ class Post(Document):
 #Página que realiza y muestra la búsqueda de un restaurante por su nombre.
 @app.route('/buscar')
 def buscar(termino):
-    for post in Post.objects(name=termino):
-        lista.append(post)
-    respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo=termino,resultados=lista))
-    respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
-    return respuesta
+    termino = request.form['term']
+
+    if termino is None:
+        respuesta = make_response(render_template('busqueda.html',user=session['user']))
+        respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
+        return respuesta
+    else
+        for post in Post.objects(name=termino):
+            lista.append(post)
+        respuesta = make_response(render_template('muestraTexto.html',user=session['user'],titulo='Resultado de la búsqueda',contenido=lista))
+        respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
+        return respuesta

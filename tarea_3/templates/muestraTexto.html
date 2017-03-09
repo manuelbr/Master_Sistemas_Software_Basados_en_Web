@@ -20,7 +20,9 @@
       <!-- Jumbotron -->
       <div class="jumbotron">
         <h1>{{ titulo }}</h1>
-        <p class="lead">{{ contenido }}</p>
+        {% for cont in contenido %}
+          <p class="lead">{{ cont }}</p>
+        {% endfor %}  
       </div>
       {% endblock %}
 
