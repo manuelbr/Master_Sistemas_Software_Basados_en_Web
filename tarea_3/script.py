@@ -113,18 +113,8 @@ def buscar():
 @app.route('/listar')
 def listar():
     lista = []
-    for res in restaurants:
+    for res in restaurants.objects[:3]:
         lista.append(res.name)
     respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',content=lista, muestraResultado='si'))
     respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
     return respuesta
-
-##Se insertan los datos en la base de datos de Mongo.
-dir = Direccion(street="Hermosa, 5 ", city="Granada", zipcode=18010, coord=[37.1766872, -3.5965171])  # así están bien
-r = restaurants(name="Casa Julio", cuisine="Granaina", borough="Centro", address=dir)
-r.save()
-
-##Se insertan los datos en la base de datos de Mongo.
-dir = Direccion(street="Hermosa, 5 ", city="Granada", zipcode=18010, coord=[37.1766872, -3.5965171])  # así están bien
-r = restaurants(name="Casa Julia", cuisine="Granaina", borough="Centro", address=dir)
-r.save()
