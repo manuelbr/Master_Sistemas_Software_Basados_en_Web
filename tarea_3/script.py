@@ -1,6 +1,7 @@
 ##!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 from flask import Flask, render_template, make_response, request, session, redirect, url_for
 import sys
 from mongoengine import *
@@ -20,7 +21,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 #Conecto con la base de datos de mongo (previamente cargada)
-connect('test', host='localhost', port=27017)
+db = connect('test', host='localhost', port=27017)
 
 #Página índice por defecto
 @app.route('/',methods=['GET', 'POST'])
@@ -45,15 +46,9 @@ def principal(user):
     return respuesta
 
 #Página que muestra un texto y hereda de la principal
-@app.route('/muestraTexto/<error>/')
-def muestraTexto(error):
-    sentinel = request.args.get('error')
-
-    if sentinel == 'no':
-        respuesta = make_response(render_template('muestraTexto.html',user=session['user'],titulo='Esto es un título',contenido='Esto es una línea de texto plano'))
-    else:
-        respuesta = make_response(render_template('muestraTexto.html',user='ERROR',titulo='Ha ocurrido un error',contenido=error))
-
+@app.route('/muestraTexto')
+def muestraTexto():
+    respuesta = make_response(render_template('muestraTexto.html',user=session['user'],titulo='Esto es un título',contenido='Esto es una línea de texto plano'))
     respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
     return respuesta
 
@@ -70,11 +65,6 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('login'))
 
-#Página de error
-@app.errorhandler(404)
-def page_not_found(e):
-    return muestraTexto(e)
-
 #Se utiliza para importar el módulo
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
@@ -82,12 +72,12 @@ if __name__ == '__main__':
 class date(Document):
     date = StringField(required=True)
 
-class Grados(EmbeddedDocumentField):
-    date = EmbeddedDocumentField("date", required=True)
+class Grados(Document):
+    date = ReferenceField("date", required=True)
     grade = StringField(required=True,max_length=2)
     score = StringField(required=True)
 
-class Direccion(EmbeddedDocumentField):
+class Direccion(Document):
     building = StringField(required=True)
     coord = ListField(StringField(required=True),max_length=2)
     street = StringField(required=True)
@@ -95,7 +85,7 @@ class Direccion(EmbeddedDocumentField):
 
 #Se crea la arquitectura de los objetos tipo "Documento"
 class Post(Document):
-    address = MapField(EmbeddedDocumentField("Direccion"), required=True)
+    address = MapField(ReferenceField("Direccion"), required=True)
     borough = StringField(required=True)
     cuisine = StringField(required=True)
     grades = ListField(ReferenceField("Grados"), required=True)
@@ -103,17 +93,21 @@ class Post(Document):
     restaurant_id = StringField(required=True)
 
 #Página que realiza y muestra la búsqueda de un restaurante por su nombre.
-@app.route('/buscar')
-def buscar(termino):
-    termino = request.form['term']
+@app.route('/buscar',methods=['GET', 'POST'])
+def buscar():
 
-    if termino is None:
-        respuesta = make_response(render_template('busqueda.html',user=session['user']))
+    if request.method == 'GET':
+        respuesta = make_response(render_template('busqueda.html',user=session['user'],muestraResultado='no'))
         respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
         return respuesta
-    else
-        for post in Post.objects(name=termino):
-            lista.append(post)
-        respuesta = make_response(render_template('muestraTexto.html',user=session['user'],titulo='Resultado de la búsqueda',contenido=lista))
+    else:
+        termino = request.form['term']
+        lista = []
+        collection = db['restaurants']
+        #print(collection.,file=sys.stderr)
+        for po in collection:
+            print(po.name,file=sys.stderr)
+            lista.append(po.name)
+        respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',content=lista, muestraResultado='si'))
         respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
         return respuesta

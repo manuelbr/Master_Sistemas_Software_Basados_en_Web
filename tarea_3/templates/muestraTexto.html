@@ -7,22 +7,18 @@
 
   <div class="container">
 
-      {% if error == "no" %}
-        {% block enlaces %}
-            <li class="active"><a href="/muestraTexto?error=no">Mostrar Texto</a></li>
+      {% block enlaces %}
+            <li class="active"><a href="/muestraTexto">Mostrar Texto</a></li>
             <li><a href="/muestraImagen">Mostrar Imagen</a></li>
+            <li><a href="/buscar">Buscar restaurante</a></li>
             <li><a href="/logout">Logout</a></li>
-        {% endblock %}
-      {% endif %}
-
+      {% endblock %}
 
       {% block contenido %}
       <!-- Jumbotron -->
       <div class="jumbotron">
         <h1>{{ titulo }}</h1>
-        {% for cont in contenido %}
-          <p class="lead">{{ cont }}</p>
-        {% endfor %}  
+          <p class="lead">{{ contenido }}</p>
       </div>
       {% endblock %}
 
