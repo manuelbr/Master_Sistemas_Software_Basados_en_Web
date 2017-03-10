@@ -21,7 +21,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 #Conecto con la base de datos de mongo (previamente cargada)
-db = connect('test', host='localhost', port=27017)
+connect('test', host='localhost', port=27017)
 
 #Página índice por defecto
 @app.route('/',methods=['GET', 'POST'])
@@ -69,33 +69,30 @@ def logout():
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
 
-class date(Document):
-    date = StringField(required=True)
+class Grados(EmbeddedDocument):
+    date = DateTimeField()
+    grade = StringField(max_length=1)
+    score = IntField()
 
-class Grados(Document):
-    date = ReferenceField("date", required=True)
-    grade = StringField(required=True,max_length=2)
-    score = StringField(required=True)
-
-class Direccion(Document):
-    building = StringField(required=True)
-    coord = ListField(StringField(required=True),max_length=2)
-    street = StringField(required=True)
-    zipcode = StringField(required=True)
+class Direccion(EmbeddedDocument):
+    building = StringField()
+    coord    = GeoPointField()
+    city = StringField()
+    street = StringField()
+    zipcode = IntField()
 
 #Se crea la arquitectura de los objetos tipo "Documento"
-class Post(Document):
-    address = MapField(ReferenceField("Direccion"), required=True)
-    borough = StringField(required=True)
-    cuisine = StringField(required=True)
-    grades = ListField(ReferenceField("Grados"), required=True)
-    name = StringField(required=True)
-    restaurant_id = StringField(required=True)
+class restaurants(Document):
+    address = EmbeddedDocumentField("Direccion")
+    borough = StringField()
+    cuisine = StringField()
+    grades = ListField(EmbeddedDocumentField("Grados"))
+    name = StringField(required=True, max_length=80)
+    restaurant_id = IntField()
 
 #Página que realiza y muestra la búsqueda de un restaurante por su nombre.
 @app.route('/buscar',methods=['GET', 'POST'])
 def buscar():
-
     if request.method == 'GET':
         respuesta = make_response(render_template('busqueda.html',user=session['user'],muestraResultado='no'))
         respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
@@ -103,11 +100,31 @@ def buscar():
     else:
         termino = request.form['term']
         lista = []
-        collection = db['restaurants']
+        #collection = db['restaurants']
         #print(collection.,file=sys.stderr)
-        for po in collection:
+        for res in restaurants:
             print(po.name,file=sys.stderr)
             lista.append(po.name)
         respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',content=lista, muestraResultado='si'))
         respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
         return respuesta
+
+#Página que lista todos los restaurantes por su nombre.
+@app.route('/listar')
+def listar():
+    lista = []
+    for res in restaurants:
+        lista.append(res.name)
+    respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',content=lista, muestraResultado='si'))
+    respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
+    return respuesta
+
+##Se insertan los datos en la base de datos de Mongo.
+dir = Direccion(street="Hermosa, 5 ", city="Granada", zipcode=18010, coord=[37.1766872, -3.5965171])  # así están bien
+r = restaurants(name="Casa Julio", cuisine="Granaina", borough="Centro", address=dir)
+r.save()
+
+##Se insertan los datos en la base de datos de Mongo.
+dir = Direccion(street="Hermosa, 5 ", city="Granada", zipcode=18010, coord=[37.1766872, -3.5965171])  # así están bien
+r = restaurants(name="Casa Julia", cuisine="Granaina", borough="Centro", address=dir)
+r.save()
