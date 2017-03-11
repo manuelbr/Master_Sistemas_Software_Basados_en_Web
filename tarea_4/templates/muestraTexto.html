@@ -1,0 +1,26 @@
+{% extends 'principal.html' %}
+
+<!--Cabecera heredada-->
+{% block head %}{{ super() }}{% endblock %}
+
+<body>
+
+  <div class="container">
+
+      {% block enlaces %}
+            <li class="active"><a href="/muestraTexto">Mostrar Texto</a></li>
+            <li><a href="/muestraImagen">Mostrar Imagen</a></li>
+            <li><a href="/buscar">Buscar restaurante</a></li>
+            <li><a href="/logout">Logout</a></li>
+      {% endblock %}
+
+      {% block contenido %}
+      <!-- Jumbotron -->
+      <div class="jumbotron">
+        <h1>{{ titulo }}</h1>
+          <p class="lead">{{ contenido }}</p>
+      </div>
+      {% endblock %}
+
+  </div>
+</body>

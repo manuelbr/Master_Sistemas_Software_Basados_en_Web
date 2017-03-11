@@ -1,0 +1,47 @@
+{% extends 'principal.html' %}
+
+<!--Cabecera heredada-->
+{% block head %}{{ super() }}{% endblock %}
+
+<body>
+
+  <div class="container">
+
+      {% block enlaces %}
+          <li><a href="/muestraTexto">Mostrar Texto</a></li>
+          <li><a href="/muestraImagen">Mostrar Imagen</a></li>
+          <li class="active"><a href="/buscar">Buscar restaurantes</a></li>
+          <li><a href="/logout">Logout</a></li>
+      {% endblock %}
+
+      {% block contenido %}
+        {% if muestraResultado == "si" %}
+            <div class="jumbotron">
+              <h1>{{ titulo }}</h1>
+              {% if not error %}
+                <p class="lead">Nombre: {{ nombre }}</p>
+                <p class="lead">Direccion: {{ dire }}</p>
+                <p class="lead">Geolocalización: {{ lat }} º latitud y {{ lon }} º longitud</p>
+              {% else %}
+                <p class="lead">{{ error }}</p>
+              {% endif %}
+            </div>
+        {% else %}
+          <!-- Jumbotron -->
+          <div class="jumbotron">
+            <form class="form-signin" action="" method="POST">
+              <h2 class="form-signin-heading">Buscar restaurante</h2>
+              <label for="inputUser" class="sr-only">Nombre del restaurante</label>
+              <input type="term" id="inputTerm" name="term" class="form-control" placeholder="Nombre del restaurante" required autofocus>
+
+              <label for="localidad" class="sr-only">Localidad</label>
+              <input type="localidad" id="localidad" name="localidad" class="form-control" placeholder="Localidad" required>
+
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Buscar</button>
+            </form>
+          </div>
+
+        {% endif %}
+      {% endblock %}
+  </div>
+</body>
