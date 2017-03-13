@@ -117,12 +117,44 @@ def buscar():
             respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
             return respuesta
 
-#Página que lista todos los restaurantes por su nombre, desde la Base de Datos en MongoDB.
+#Página que lista los 10 primeros restaurantes de la base de datos en mongo.
 @app.route('/listar')
 def listar():
     lista = []
-    for res in restaurants.objects[:3]:
-        lista.append(res.name)
+
+    #Datos de los restaurantes a insertar
+    restaurantes = ['Los Frutales','El Patio Andaluz','Bar Almudena','Bar Chorrohumo']
+    localidades = ['Ogíjares','La Zubia','El Zaidín', 'Alhendín']
+    str_url = 'http://maps.googleapis.com/maps/api/geocode/xml?address='
+    sentinel = 0
+
+    #Inserción de los restaurantes
+    for rest in restaurantes:
+        r = str_url + rest.replace(" ","+") +"+"+localidades[sentinel].replace(" ","+")
+        tree = etree.parse(r)
+        zipcode = tree.xpath('//address_component[type = "postal_code"]/long_name/text()')
+        street = tree.xpath('//address_component[type = "route"]/long_name/text()')
+        number = tree.xpath('//address_component[type = "street_number"]/long_name/text()')
+        localidad = tree.xpath('//address_component[type = "locality"]/long_name/text()')
+        city = tree.xpath('//address_component[type = "administrative_area_level_2"]/long_name/text()')
+        lat = tree.xpath('//location/lat/text()')
+        lon = tree.xpath('//location/lng/text()')
+
+        print(r)
+        print("Zipcode "+zipcode[0])
+        print("Calle "+street[0])
+        print("Número "+number[0])
+        print("Localidad "+localidad[0])
+        print("Ciudad "+city[0])
+
+        dir = Direccion(street=street[0]+", "+number[0], city=localidad[0]+", "+city[0],zipcode=int(zipcode[0]), coord=[float(lat[0]),float(lon[0])])  # así están bien
+        r = restaurants(name=rest, cuisine="Granaina", borough=localidades[sentinel], address=dir)
+        r.save()
+        sentinel = sentinel + 1
+
+    #Listado de los cuatro primeros restaurantes, los que hemos introducido
+    for res in restaurants.objects.order_by('restaurant_id')[:4]:
+        lista.append(res)
     respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',content=lista, muestraResultado='si'))
     respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
     return respuesta
