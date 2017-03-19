@@ -59,30 +59,47 @@ def logout(request):
     request.session.pop('user', None)
     return redirect('/restaurantes')
 
-#Página que realiza y muestra la búsqueda de un restaurante por su nombre.
-def buscar():
-    if request.method == 'GET':
-        respuesta = make_response(render_template('busqueda.html',user=session['user'],muestraResultado='no'))
-        respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
-        return respuesta
-    else:
-        restaurante = request.form['term']
-        localidad = request.form['localidad']
-        str_url = 'http://maps.googleapis.com/maps/api/geocode/xml?address='
-        r = str_url + restaurante + localidad
-        tree = etree.parse(r)
-        dire = tree.xpath('//formatted_address/text()')
-        lat = tree.xpath('//location/lat/text()')
-        lon = tree.xpath('//location/lng/text()')
+#Página que muestra el formulario de búsqueda avanzada.
+def busqueda(request):
+    context = {
+        'user' : request.session['user'],
+    }
+    return render(request,'busqueda.html',context)
 
-        if len(dire) != 0:
-            respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',nombre=restaurante,dire=dire[0],lat=lat,lon=lon, muestraResultado='si'))
-            respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
-            return respuesta
-        else:
-            respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',error='No se ha encontrado el restaurante', muestraResultado='si'))
-            respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
-            return respuesta
+#Página que realiza y muestra la búsqueda de un restaurante por su nombre.
+def muestraResultado(request):
+        name = request.GET.get('name')
+        cuisine = request.GET.get('cuisine')
+        locality = request.GET.get('locality')
+
+        #Todas las posibilidades de rellenado del formulario
+        if name is None and cuisine is not None and locality is not None:
+            resultado = restaurants.objects(cuisine=cuisine, address={'city':locality})
+        elif name is None and cuisine is None and locality is not None:
+            resultado = restaurants.objects(address={'city':locality})
+        elif name is None and cuisine is None and locality is None:
+            resultado = restaurants.objects()
+        elif name is None and cuisine is not None and locality is None:
+            resultado = restaurants.objects(cuisine=cuisine)
+        elif name is not None and cuisine is not None and locality is not None:
+            resultado = restaurants.objects(name=name,cuisine=cuisine, address={'city':locality})
+        elif name is not None and cuisine is None and locality is None:
+            resultado = restaurants.objects(name=name)
+        elif name is not None and cuisine is not None and locality is None:
+            resultado = restaurants.objects(name = name,cuisine=cuisine)
+        elif name is not None and cuisine is None and locality is not None:
+            resultado = restaurants.objects(name = name,address={'city':locality})
+
+        print("RESULTADOOOOO"+resultado)    
+
+        context = {
+            'user' : request.session['user'],
+            'name' : name,
+            'cuisine': cuisine,
+            'locality': locality,
+            'lista': resultado,
+        }
+        return render(request,'muestraResultado.html',context)
 
 #Página que lista los 10 primeros restaurantes de la base de datos en mongo.
 def listar(request):

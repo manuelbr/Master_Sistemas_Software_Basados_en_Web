@@ -58,14 +58,21 @@
             {{ login }}
           {% endif %}
         </div>
+
         <div id="navbar" class="navbar-collapse collapse">
+          <!-- Botón de búsqueda -->
           <form class="navbar-form navbar-right">
             <div class="form-group">
               <input type="text" placeholder="Busqueda" class="form-control">
             </div>
             <button type="submit" class="btn btn-success">Buscar</button>
           </form>
+          <!-- Botón de Búsqueda avanzada -->
+          <form action="/restaurantes/busqueda">
+            <button type="submit" class="btn btn-success">Búsqueda avanzada</button>
+          </form>
         </div>
+
         {% endblock %}
       </div>
     </nav>
