@@ -4,7 +4,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.views.decorators.csrf import csrf_exempt
 from mongoengine import *
 from lxml import etree
-import sys
+import sys, re
 from models import *
 
 #Especifico utf8 como el sistema de codificación por defecto
@@ -68,36 +68,40 @@ def busqueda(request):
 
 #Página que realiza y muestra la búsqueda de un restaurante por su nombre.
 def muestraResultado(request):
-        name = request.GET.get('name')
-        cuisine = request.GET.get('cuisine')
-        locality = request.GET.get('locality')
+        term = request.GET.get('term')
+        lista = []
 
-        #Todas las posibilidades de rellenado del formulario
-        if name is None and cuisine is not None and locality is not None:
-            resultado = restaurants.objects(cuisine=cuisine, address={'city':locality})
-        elif name is None and cuisine is None and locality is not None:
-            resultado = restaurants.objects(address={'city':locality})
-        elif name is None and cuisine is None and locality is None:
-            resultado = restaurants.objects()
-        elif name is None and cuisine is not None and locality is None:
-            resultado = restaurants.objects(cuisine=cuisine)
-        elif name is not None and cuisine is not None and locality is not None:
-            resultado = restaurants.objects(name=name,cuisine=cuisine, address={'city':locality})
-        elif name is not None and cuisine is None and locality is None:
-            resultado = restaurants.objects(name=name)
-        elif name is not None and cuisine is not None and locality is None:
-            resultado = restaurants.objects(name = name,cuisine=cuisine)
-        elif name is not None and cuisine is None and locality is not None:
-            resultado = restaurants.objects(name = name,address={'city':locality})
+        if term is None:
+            name = request.GET.get('name')
+            cuisine = request.GET.get('cuisine')
+            locality = request.GET.get('locality')
 
-        print("RESULTADOOOOO"+resultado)    
+            #Todas las posibilidades de rellenado del formulario
+            if name == "" and cuisine != "" and locality != "":
+                resultado = restaurants.objects(cuisine=re.compile(cuisine, re.IGNORECASE), address={'city':re.compile(locality, re.IGNORECASE)})
+            elif name == "" and cuisine == "" and locality != "":
+                resultado = restaurants.objects(address={'city':re.compile(locality, re.IGNORECASE)})
+            elif name == "" and cuisine == "" and locality == "":
+                resultado = restaurants.objects
+            elif name == "" and cuisine != "" and locality == "":
+                resultado = restaurants.objects(cuisine=re.compile(cuisine, re.IGNORECASE))
+            elif name != "" and cuisine != "" and locality != "":
+                resultado = restaurants.objects(name=re.compile(name, re.IGNORECASE),cuisine=re.compile(cuisine, re.IGNORECASE), address={'city':re.compile(locality, re.IGNORECASE)})
+            elif name != "" and cuisine == "" and locality == "":
+                resultado = restaurants.objects(name=re.compile(name, re.IGNORECASE))
+            elif name != "" and cuisine != "" and locality == "":
+                resultado = restaurants.objects(name = re.compile(name, re.IGNORECASE),cuisine=re.compile(cuisine, re.IGNORECASE))
+            elif name != "" and cuisine == "" and locality != "":
+                resultado = restaurants.objects(name = re.compile(name, re.IGNORECASE),address={'city':re.compile(locality, re.IGNORECASE)})
+        else:
+            resultado = restaurants.objects(name=re.compile(term, re.IGNORECASE))
+
+        for r in resultado:
+            lista.append(r)
 
         context = {
             'user' : request.session['user'],
-            'name' : name,
-            'cuisine': cuisine,
-            'locality': locality,
-            'lista': resultado,
+            'lista': lista,
         }
         return render(request,'muestraResultado.html',context)
 
@@ -118,12 +122,11 @@ def listar(request):
         zipcode = tree.xpath('//address_component[type = "postal_code"]/long_name/text()')
         street = tree.xpath('//address_component[type = "route"]/long_name/text()')
         number = tree.xpath('//address_component[type = "street_number"]/long_name/text()')
-        localidad = tree.xpath('//address_component[type = "locality"]/long_name/text()')
         city = tree.xpath('//address_component[type = "administrative_area_level_2"]/long_name/text()')
         lat = tree.xpath('//location/lat/text()')
         lon = tree.xpath('//location/lng/text()')
 
-        dir = Direccion(street=street[0]+", "+number[0], city=localidad[0]+", "+city[0],zipcode=int(zipcode[0]), coord=[float(lat[0]),float(lon[0])])  # así están bien
+        dir = Direccion(street=street[0]+", "+number[0], city=city[0],zipcode=int(zipcode[0]), coord=[float(lat[0]),float(lon[0])])  # así están bien
         r = restaurants(name=rest, cuisine="Granaina", borough=localidades[sentinel], address=dir)
         r.save()
         sentinel = sentinel + 1
