@@ -13,4 +13,5 @@ urlpatterns = [
   url(r'^listar', views.listar, name='listar'),
   url(r'^busqueda', views.busqueda, name='busqueda'),
   url(r'^muestraResultado', views.muestraResultado, name='muestraResultado'),
+  url(r'^insertar', views.insertar, name='insertar'),
 ]

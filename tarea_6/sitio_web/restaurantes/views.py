@@ -6,6 +6,7 @@ from mongoengine import *
 from lxml import etree
 import sys, re
 from models import *
+from forms import *
 
 #Especifico utf8 como el sistema de codificación por defecto
 #(Para evitar problemas con acentos y demás...)
@@ -65,6 +66,15 @@ def busqueda(request):
         'user' : request.session['user'],
     }
     return render(request,'busqueda.html',context)
+
+def insertar(request):
+    form = restaurantsForm()
+    context = {
+        'user' : request.session['user'],
+        'titulo' : 'Insertar un restaurante',
+        'form' : form,
+    }
+    return render(request,'insertar.html',context)
 
 #Página que realiza y muestra la búsqueda de un restaurante por su nombre.
 def muestraResultado(request):

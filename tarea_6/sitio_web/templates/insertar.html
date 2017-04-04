@@ -1,0 +1,47 @@
+{% extends 'principal.html' %}
+
+<!--Cabecera heredada-->
+{% block head %}{{ block.super }}{% endblock %}
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+      {% block contenido %}
+        <div class="jumbotron">
+          <h1>{{ titulo }}</h1>
+          {% csrf_token %}
+          <form action="/restaurantes/muestraResultado" method="get">
+              <div class="form-group">
+                  {{ restaurantsForm.restaurant_id }}
+              </div>
+              <div class="form-group">
+                  {{ form.name }}
+              </div>
+              <div class="form-group">
+                  {{ form.borough }}
+              </div>
+              <div class="form-group">
+                  {{ form.cuisine }}
+              </div>
+              <div class="form-group">
+                  {{ form.building }}
+              </div>
+              <div class="form-group">
+                  {{ form.city }}
+              </div>
+              <div class="form-group">
+                  {{ form.street }}
+              </div>
+              <div class="form-group">
+                  {{ form.zipcode }}
+              </div>
+              <div class="form-group">
+                  {{ form.imagen }}
+              </div>
+              <button type="submit" class="btn btn-success">Insertar restaurante</button>
+          </form>
+        </div>
+      {% endblock %}
+  </div>
+</nav>
+</body>
