@@ -14,7 +14,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 #Conecto con la base de datos de mongo (previamente cargada)
-connect('test', host='localhost', port=27017)
+connect('restaurantes', host='localhost', port=27017)
 
 #Página índice por defecto
 @csrf_exempt
@@ -68,13 +68,44 @@ def busqueda(request):
     return render(request,'busqueda.html',context)
 
 def insertar(request):
-    form = restaurantsForm()
-    context = {
-        'user' : request.session['user'],
-        'titulo' : 'Insertar un restaurante',
-        'form' : form,
-    }
-    return render(request,'insertar.html',context)
+    if request.method == 'POST':
+        form = restaurantsForm(request.POST)
+        if form.is_valid():
+            borough = form.cleaned_data['borough']
+            cuisine = form.cleaned_data['cuisine']
+            name = form.cleaned_data['name']
+            restaurant_id = form.cleaned_data['restaurant_id']
+            building = form.cleaned_data['building']
+            city = form.cleaned_data['city']
+            street = form.cleaned_data['street']
+            zipcode = form.cleaned_data['zipcode']
+            imagen = request.FILES.get('imagen')
+
+            res = restaurants(borough=borough,cuisine=cuisine,name=name,restaurant_id=restaurant_id,building=building,city=city,street=street,zipcode=zipcode,imagen=imagen)
+            res.save()
+
+            form = restaurantsForm()
+            context = {
+                'user' : request.session['user'],
+                'titulo' : 'Insertar un restaurante',
+                'form' : form,
+            }
+            print('HOLA QUE ASEE')
+            return render(request,'insertar.html',context)
+        else:
+            context = {
+                'user' : request.session['user'],
+                'form' : form,
+            }
+            return render(request,'insertar.html',context)
+    else:
+        form = restaurantsForm()
+        context = {
+            'user' : request.session['user'],
+            'titulo' : 'Insertar un restaurante',
+            'form' : form,
+        }
+        return render(request,'insertar.html',context)
 
 #Página que realiza y muestra la búsqueda de un restaurante por su nombre.
 def muestraResultado(request):
@@ -118,28 +149,6 @@ def muestraResultado(request):
 #Página que lista los 10 primeros restaurantes de la base de datos en mongo.
 def listar(request):
     lista = []
-
-    #Datos de los restaurantes a insertar
-    restaurantes = ['Los Frutales','El Patio Andaluz','Bar Almudena','Bar Chorrohumo']
-    localidades = ['Ogíjares','La Zubia','El Zaidín', 'Alhendín']
-    str_url = 'http://maps.googleapis.com/maps/api/geocode/xml?address='
-    sentinel = 0
-
-    #Inserción de los restaurantes
-    for rest in restaurantes:
-        r = str_url + rest.replace(" ","+") +"+"+localidades[sentinel].replace(" ","+")
-        tree = etree.parse(r)
-        zipcode = tree.xpath('//address_component[type = "postal_code"]/long_name/text()')
-        street = tree.xpath('//address_component[type = "route"]/long_name/text()')
-        number = tree.xpath('//address_component[type = "street_number"]/long_name/text()')
-        city = tree.xpath('//address_component[type = "administrative_area_level_2"]/long_name/text()')
-        lat = tree.xpath('//location/lat/text()')
-        lon = tree.xpath('//location/lng/text()')
-
-        dir = Direccion(street=street[0]+", "+number[0], city=city[0],zipcode=int(zipcode[0]), coord=[float(lat[0]),float(lon[0])])  # así están bien
-        r = restaurants(name=rest, cuisine="Granaina", borough=localidades[sentinel], address=dir)
-        r.save()
-        sentinel = sentinel + 1
 
     #Listado de los cuatro primeros restaurantes, los que hemos introducido
     for res in restaurants.objects.order_by('restaurant_id')[:4]:

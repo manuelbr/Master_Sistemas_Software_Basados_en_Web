@@ -14,3 +14,4 @@ class restaurants(Document):
     city = StringField()
     street = StringField()
     zipcode = IntField()
+    imagen = ImageField()
