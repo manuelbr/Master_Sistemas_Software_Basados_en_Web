@@ -1,0 +1,20 @@
+{% extends 'principal.html' %}
+
+<!--Cabecera heredada-->
+{% block head %}{{ block.super }}{% endblock %}
+
+<body>
+
+  <div class="container">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      {% block contenido %}
+      <!-- Jumbotron -->
+      <div class="jumbotron">
+        <h1>{{ titulo }}</h1>
+        {% load static %}
+        <img style='height: 100%; width: 100%; object-fit: contain' src="{% static 'img/imagen.jpg' %}" type="image/jpg"></img>
+      </div>
+      {% endblock %}
+  </nav>
+  </div>
+</body>
