@@ -14,4 +14,5 @@ urlpatterns = [
   url(r'^busqueda', views.busqueda, name='busqueda'),
   url(r'^muestraResultado', views.muestraResultado, name='muestraResultado'),
   url(r'^insertar', views.insertar, name='insertar'),
+  url(r'^(?P<resid>\d+)/$', views.res_details, name='res_details'),
 ]

@@ -21,7 +21,7 @@
         <div class="jumbotron">
           <h1>{{ titulo }}</h1>
 
-          <form action="/restaurantes/insertar" method="post">
+          <form enctype="multipart/form-data" action="/restaurantes/insertar" method="post">
               {% csrf_token %}
               <div class="form-group">
                   {{ form.restaurant_id.label_tag }}

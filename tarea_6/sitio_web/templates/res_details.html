@@ -1,0 +1,22 @@
+{% extends 'principal.html' %}
+
+<!--Cabecera heredada-->
+{% block head %}{{ block.super }}{% endblock %}
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+      {% block contenido %}
+        {% for r in restaurante %}
+        <div class="jumbotron">
+          <h1>{{ r.name }}</h1>
+            <p class="lead">Direccion: {{ r.street }} {{r.building}} {{r.zipcode}}. {{ r.city }}. {{r.borough}} </p>
+            <p class="lead">Tipo de cocina: {{ r.cuisine }}</p>
+            <img src="data:image/png;base64,/tmp/{{ r.imagen }}">
+          </br>
+        </div>
+        {% endfor %}
+      {% endblock %}
+  </div>
+</nav>
+</body>

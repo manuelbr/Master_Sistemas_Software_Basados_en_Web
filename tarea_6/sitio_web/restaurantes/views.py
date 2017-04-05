@@ -4,6 +4,8 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.views.decorators.csrf import csrf_exempt
 from mongoengine import *
 from lxml import etree
+from tempfile import NamedTemporaryFile
+from shutil import copyfileobj
 import sys, re
 from models import *
 from forms import *
@@ -67,9 +69,14 @@ def busqueda(request):
     }
     return render(request,'busqueda.html',context)
 
+def handle_uploaded_file(f):
+    with open('imagen', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
 def insertar(request):
     if request.method == 'POST':
-        form = restaurantsForm(request.POST)
+        form = restaurantsForm(request.POST, request.FILES)
         if form.is_valid():
             borough = form.cleaned_data['borough']
             cuisine = form.cleaned_data['cuisine']
@@ -81,7 +88,10 @@ def insertar(request):
             zipcode = form.cleaned_data['zipcode']
             imagen = request.FILES.get('imagen')
 
-            res = restaurants(borough=borough,cuisine=cuisine,name=name,restaurant_id=restaurant_id,building=building,city=city,street=street,zipcode=zipcode,imagen=imagen)
+            res = restaurants(borough=borough,cuisine=cuisine,name=name,restaurant_id=restaurant_id,building=building,city=city,street=street,zipcode=zipcode)
+            handle_uploaded_file(imagen)
+            marmot = open('/home/manuelbr/Descargas/'+imagen.name, 'rb')
+            res.imagen.put(marmot, content_type = imagen.content_type)
             res.save()
 
             form = restaurantsForm()
@@ -106,6 +116,27 @@ def insertar(request):
             'form' : form,
         }
         return render(request,'insertar.html',context)
+
+def res_details(request,resid):
+    ide = resid
+    resultado = restaurants.objects(restaurant_id = ide)
+    #Descarga de la imagen de la base de datos de mongo
+
+    #tempFileObj = NamedTemporaryFile(mode='w+b',suffix='jpg')
+    #copyfileobj(resultado[0].imagen,tempFileObj)
+    #tempFileObj.seek(0,0)
+
+    #with open('/tmp/'+resultado[0].imagen,'wb+') as destination:
+    #    for chunk in resultado.chunks():
+    #        destination.write(chunk);
+
+    context = {
+        'user' : request.session['user'],
+        'restaurante' : resultado,
+        'imagen' : img.read().encode("base64"),
+    }
+    return render(request,'res_details.html',context)
+
 
 #Página que realiza y muestra la búsqueda de un restaurante por su nombre.
 def muestraResultado(request):

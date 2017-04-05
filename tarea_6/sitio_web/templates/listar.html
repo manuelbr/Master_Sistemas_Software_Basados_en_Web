@@ -10,9 +10,9 @@
         <div class="jumbotron">
           <h1>{{ titulo }}</h1>
           {% for con in content %}
-            <p class="lead">Nombre: {{ con.name }}</p>
-            <p class="lead">Direccion: {{ con.address.street }}. {{con.address.city}}</p>
-            <p class="lead">Geolocalización: {{ con.address.coord.0 }} º latitud y {{ con.address.coord.1 }} º longitud</p>
+            <p class="lead">Nombre: <a href= {{ con.restaurant_id }}>{{ con.name }}</a></p>
+            <p class="lead">Direccion: {{ con.street }}. {{con.city}}</p>
+            <p class="lead">Tipo de cocina: {{ con.cuisine }}</p>
           </br>
           {% endfor%}
         </div>
