@@ -8,7 +8,7 @@ class restaurantsForm(forms.Form):
     borough = forms.CharField(label='Barrio',required=False)
     cuisine = forms.CharField(label='Tipo de cocina',required=False)
     name = forms.CharField(label='Nombre del local',required=True, max_length=80)
-    restaurant_id = forms.IntegerField(label='Id del restaurante')
+    restaurant_id = forms.IntegerField(label='Id del restaurante',required=False)
     building = forms.CharField(label='Nombre de edificio (si procede)',required=False)
     city = forms.CharField(label='Ciudad de localización',required=False)
     street = forms.CharField(label='Calle',required=False)

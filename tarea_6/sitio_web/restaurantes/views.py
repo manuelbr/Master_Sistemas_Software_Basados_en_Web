@@ -88,7 +88,7 @@ def insertar(request):
             zipcode = form.cleaned_data['zipcode']
             imagen = request.FILES.get('imagen')
 
-            res = restaurants(borough=borough,cuisine=cuisine,name=name,restaurant_id=restaurant_id,building=building,city=city,street=street,zipcode=zipcode)
+            res = restaurants(borough=borough,cuisine=cuisine,name=name,restaurant_id=(restaurants.objects.count() + 1),building=building,city=city,street=street,zipcode=zipcode)
             handle_uploaded_file(imagen)
             marmot = open('/home/manuelbr/Descargas/'+imagen.name, 'rb')
             res.imagen.put(marmot, content_type = imagen.content_type)
@@ -100,7 +100,6 @@ def insertar(request):
                 'titulo' : 'Insertar un restaurante',
                 'form' : form,
             }
-            print('HOLA QUE ASEE')
             return render(request,'insertar.html',context)
         else:
             context = {
@@ -119,21 +118,12 @@ def insertar(request):
 
 def res_details(request,resid):
     ide = resid
-    resultado = restaurants.objects(restaurant_id = ide)
-    #Descarga de la imagen de la base de datos de mongo
-
-    #tempFileObj = NamedTemporaryFile(mode='w+b',suffix='jpg')
-    #copyfileobj(resultado[0].imagen,tempFileObj)
-    #tempFileObj.seek(0,0)
-
-    #with open('/tmp/'+resultado[0].imagen,'wb+') as destination:
-    #    for chunk in resultado.chunks():
-    #        destination.write(chunk);
+    resultado = restaurants.objects(restaurant_id = ide).first()
 
     context = {
         'user' : request.session['user'],
         'restaurante' : resultado,
-        'imagen' : img.read().encode("base64"),
+        'imagen' : resultado.imagen.read().encode("base64")
     }
     return render(request,'res_details.html',context)
 
@@ -182,7 +172,7 @@ def listar(request):
     lista = []
 
     #Listado de los cuatro primeros restaurantes, los que hemos introducido
-    for res in restaurants.objects.order_by('restaurant_id')[:4]:
+    for res in restaurants.objects:
         lista.append(res)
 
     context = {
