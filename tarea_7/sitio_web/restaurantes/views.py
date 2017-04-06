@@ -7,6 +7,7 @@ from lxml import etree
 from django.contrib.auth.decorators import login_required
 from tempfile import NamedTemporaryFile
 from shutil import copyfileobj
+from django.views.generic.base import TemplateView
 import sys, re
 from models import *
 from forms import *
@@ -185,3 +186,7 @@ def listar(request):
         'muestraResultado': 'si',
     }
     return render(request,'listar.html',context)
+
+
+class IndexView(TemplateView):
+    template_name = 'index.html'
