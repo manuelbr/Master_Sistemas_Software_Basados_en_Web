@@ -59,11 +59,6 @@ def muestraImagen(request):
     }
     return render(request,'muestraImagen.html',context)
 
-#Se deslogea al usuario de la sesión en la que se encuentra
-def logout(request):
-    request.session.pop('user', None)
-    return redirect('/restaurantes')
-
 #Página que muestra el formulario de búsqueda avanzada.
 def busqueda(request):
     context = {

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Login</h1>
         <form class="form-signin" method="post" action=".">
                 {% csrf_token %}
                 {{ form.as_p }}
@@ -10,5 +9,5 @@
                 <input type="hidden" class="btn btn-lg btn-primary btn-block" name="next" value="{{ next }}" />
         </form>
 
-        <p>Not  a member? <a href="{% url 'registration_register' %}">Register</a>!</p>
+        <p class="form-signin">Not  a member? <a class="form-signin" href="{% url 'registration_register' %}">Register</a>!</p>
 {% endblock %}
