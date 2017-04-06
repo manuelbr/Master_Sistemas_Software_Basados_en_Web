@@ -21,26 +21,24 @@ sys.setdefaultencoding('utf8')
 connect('restaurantes', host='localhost', port=27017)
 
 #Página índice por defecto
-@csrf_exempt
-@login_required
-def login(request):
-    if 'user' in request.session:
-        #Si ya hay una sesión iniciada, se redirige a la página principal para que se le de la bienvenida
-        return principal(request=request,user=request.session['user'])
-    elif request.method == 'POST':
-        #Si se reciben los datos de email desde un login anterior, se envian a la página principal y además se registra en la sesión
-        request.session['user'] = request.POST.get('user')
-        return principal(request=request,user=request.POST.get('user'))
-    else:
-        context = {}
-        return render(request,'login.html',context)
+#@csrf_exempt
+#@login_required
+#def login(request):
+#    if 'user' in request.session:
+#        #Si ya hay una sesión iniciada, se redirige a la página principal para que se le de la bienvenida
+#        return principal(request=request,user=request.session['user'])
+#    elif request.method == 'POST':
+#        #Si se reciben los datos de email desde un login anterior, se envian a la página principal y además se registra en la sesión
+#        request.session['user'] = request.POST.get('user')
+#        return principal(request=request,user=request.POST.get('user'))
+#    else:
+#        context = {}
+#        return render(request,'login.html',context)
 
 #Página principal que da la bienvenida al usuario
 @login_required
-def principal(request,user):
-    context = {
-        'user' : user,
-    }
+def principal(request):
+    context = {}
     return render(request,'principal.html',context)
 
 #Página que muestra un texto y hereda de la principal

@@ -7,7 +7,7 @@ from .views import IndexView
 from . import views
 
 urlpatterns = [
-  url(r'^$', views.IndexView.as_view(), name='index'),
+  url(r'^$', views.principal, name='index'),
   url(r'^principal', views.principal, name='principal'),
   url(r'^muestraTexto', views.muestraTexto, name='muestraTexto'),
   url(r'^muestraImagen', views.muestraImagen, name='muestraImagen'),
