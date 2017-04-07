@@ -1,0 +1,29 @@
+{% extends 'principal.html' %}
+
+<!--Cabecera heredada-->
+{% block head %}{{ block.super }}{% endblock %}
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+      {% block contenido %}
+      <h3>Busqueda avanzada</h3>
+      <form action="/restaurantes/muestraResultado" method="get">
+          <div class="form-group">
+              <label for="formGroupExampleInput">Nombre</label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Nombre del restaurante">
+          </div>
+          <div class="form-group">
+            <label for="formGroupExampleInput2">Tipo de cocina</label>
+            <input type="text" class="form-control" id="cuisine" name="cuisine" placeholder="Tipo de cocina">
+          </div>
+          <div class="form-group">
+            <label for="formGroupExampleInput2">Localidad</label>
+            <input type="text" class="form-control" id="locality" name="locality" placeholder="Localidad del restaurante">
+          </div>
+          <button type="submit" class="btn btn-success">Búsqueda avanzada</button>
+      </form>
+      {% endblock %}
+  </div>
+</nav>
+</body>

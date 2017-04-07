@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Hola Mundo</title>
+   </head>
+   <body>
+      <h1>Hola</h1>
+      <p>Esto es un simple 'Hola mundo' de toda la vida</p>
+
+      <!--Uso de parámetros con jinjer en template -->
+      <p>Hola {{ var }}</p>
+      <ul>
+        {% for user in usuarios %}
+        <li>{{ user.name }},{{ user.dni }}</li>
+      </ul>
+   </body>
+</html>
