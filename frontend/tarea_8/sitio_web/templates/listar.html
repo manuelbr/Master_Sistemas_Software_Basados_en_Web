@@ -1,0 +1,66 @@
+{% extends 'principal.html' %}
+
+<!--Cabecera heredada-->
+{% block head %}{{ block.super }}{% endblock %}
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+      {% block contenido %}
+
+      <script>
+          $("#listar").css('color','white');
+      </script>
+
+        <div class="jumbotron">
+          <h1>{{ titulo }}</h1>
+          {% for con in content %}
+            <p class="lead">Nombre: <a class="enlaceRestaurante" href= {{ con.restaurant_id }} >{{ con.name }}</a></p>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Dirección completa</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p class="resultado"></p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <p class="lead">Direccion: {{ con.street }}. {{con.city}}</p>
+            <p class="lead">Tipo de cocina: {{ con.cuisine }}</p>
+          </br>
+          {% endfor%}
+        </div>
+
+        <script>
+            $(document).ready(function(){
+                $(".enlaceRestaurante").hover(function(event){
+                      $(this).delay(1000).fadeIn(function(){
+                        $.getJSON({url: "http://maps.googleapis.com/maps/api/geocode/json?address="+"Bar+"+event.target.text, success: function(result){
+                          $.each(result.results[0], function(key, value){
+                            if(key == "formatted_address"){
+                              $(".resultado").html(value);
+                            }
+                          });
+                        }});
+                        $("#myModal").modal({show: true});
+                      });
+                });
+            });
+        </script>
+      {% endblock %}
+  </div>
+</nav>
+</body>
