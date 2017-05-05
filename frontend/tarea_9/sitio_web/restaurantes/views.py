@@ -100,12 +100,12 @@ def insertar(request):
         }
         return render(request,'insertar.html',context)
 
-def res_details(request,resid):
-    ide = resid
-    resultado = restaurants.objects(restaurant_id = ide).first()
+def res_details(request,name):
+
+    resultado = restaurants.objects(name =  name.replace("+"," ")).first()
 
     context = {
-        'restaurante' : resultado,
+        'restaurante' : name.replace("+"," "),
         'imagen' : resultado.imagen.read().encode("base64")
     }
     logger.info(time.strftime("%H:%M:%S")+" se ha accedido a los detalles de un restaurante")

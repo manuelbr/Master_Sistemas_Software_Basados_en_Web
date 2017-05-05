@@ -8,3 +8,10 @@
 * Ahora, todo el código de creación de restaurantes y subida de imagenes ya no sería necesario, dado que lo hace la api sola.
 * Para trasladar al móvil el uso de la web con la api, se usará React de javascript: una serie de librerias. Es algo parecido a Angular. Hay que seguir los tutoriales que hay en swad.
 * La parte de react se hará la semana que viene. Esta centrarse en la parte de la API.
+
+## Notas de la tarea 9 (REST) terminada
+* Si accedemos a la api con la dirección: http://127.0.0.1:8000/api podemos ver la página principal de la api.
+* Podemos acceder a la colección completa de restaurantes usando la url:http://127.0.0.1:8000/restaurantes/api/restaurants/
+* Podemos acceder a un restaurante de la colección en concreto con la url: http://127.0.0.1:8000/api/restaurants/Nombre_Bar.
+* Se ha modificado la muestra de restaurantes para descargar al servidor de peso y poder usar la api rest, de forma
+que los datos en texto de cada restaurante se cargan de forma asíncrona con ajax.

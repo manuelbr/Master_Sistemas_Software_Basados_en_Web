@@ -15,8 +15,9 @@
         <div class="jumbotron">
           <h1>{{ titulo }}</h1>
           {% for con in content %}
-            <p class="lead">Nombre: <a class="enlaceRestaurante" href= {{ con.restaurant_id }} >{{ con.name }}</a></p>
-
+            {% with "restaurante/"|add:con.name as dir %}
+              <p class="lead">Nombre: <a class="enlaceRestaurante" href= {{ dir.split|join:"+" }} >{{ con.name }}</a></p>
+            {% endwith %}
             <!-- Modal -->
             <div class="modal fade" id="myModal" role="dialog">
               <div class="modal-dialog">

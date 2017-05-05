@@ -5,7 +5,7 @@ from .models import restaurants
 class restaurantsSerializer(serializers.DocumentSerializer):
     class Meta:
            model = restaurants
-           fields = ('name', 'cuisine', 'borough', 'address', 'image')
+           fields = ('name', 'cuisine', 'borough', 'restaurant_id', 'building','city', 'street', 'zipcode', 'imagen')
 
 
 class restaurantsViewSet(viewsets.ModelViewSet):
