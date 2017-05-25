@@ -1,0 +1,28 @@
+{% extends 'principal.html' %}
+
+<!--Cabecera heredada-->
+{% block head %}{{ block.super }}{% endblock %}
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+      {% block contenido %}
+        <script>
+          $("#busqueda_avanzada").css('background-color','DarkGreen');
+        </script>
+
+        <div class="jumbotron">
+          <h1>Resultados de la búsqueda</h1>
+          {% for lis in lista %}
+            {% with "restaurante/"|add:lis.name as dir %}
+              <p class="lead"><a href= {{ dir.split|join:"+" }}>{{ lis.name }}</a></p>
+            {% endwith %}  
+            <p class="lead">Direccion: {{ lis.street }}. {{lis.city}}</p>
+            <p class="lead">Tipo de cocina: {{ lis.cuisine }}</p>
+          </br>
+          {% endfor%}
+        </div>
+      {% endblock %}
+  </div>
+</nav>
+</body>
