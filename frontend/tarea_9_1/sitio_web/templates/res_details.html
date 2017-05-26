@@ -11,6 +11,13 @@
       <script>
           var name = "{{ restaurante }}";
 
+          //Nos autentificamos
+          $.ajaxSetup({
+              headers : {
+                  'Authorization' : 'Token 2129e99144432069b7ba8fa57351e4f5b09ba26d'
+              }
+          });
+
           $.getJSON({url: "http://127.0.0.1:8000/api/restaurants/"+name.split("+").join(" "), success: function(result){
             var direccion = " ";
             var cocina = " ";
