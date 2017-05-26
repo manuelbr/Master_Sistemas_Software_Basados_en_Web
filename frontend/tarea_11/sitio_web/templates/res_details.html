@@ -10,8 +10,17 @@
 
       <script>
           var name = "{{ restaurante }}";
+          var url = "http://127.0.0.1:8000/api/restaurants/"+name.split("+").join(" ");
+          console.log(url);
 
-          $.getJSON({url: "http://127.0.0.1:8000/api/restaurants/"+name.split("+").join(" "), success: function(result){
+          //Nos autentificamos
+          $.ajaxSetup({
+              headers : {
+                  'Authorization' : 'Token 2129e99144432069b7ba8fa57351e4f5b09ba26d'
+              }
+          });
+
+          $.getJSON({url, success: function(result){
             var direccion = " ";
             var cocina = " ";
             var imagen;
@@ -27,10 +36,9 @@
                         imagen = value;
                       }
             });
+
             $("#address").html("Dirección: "+direccion);
             $("#cuisine").html("Tipo de cocina: "+cocina);
-            //$("#image").attr( 'src','data:image/png;base64,'+imagen);
-            //console.log('data:image/png;base64,'+imagen);
           }});
 
       </script>
