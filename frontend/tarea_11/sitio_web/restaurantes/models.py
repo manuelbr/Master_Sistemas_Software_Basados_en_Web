@@ -4,6 +4,8 @@ from django.db import models
 from mongoengine import *
 from lxml import etree
 
+#Conecto con la base de datos de mongo (previamente cargada)
+connect('restaurantes', host='database', port=27017)
 
 #Se crea la arquitectura de los objetos tipo "Documento"
 class restaurants(Document):

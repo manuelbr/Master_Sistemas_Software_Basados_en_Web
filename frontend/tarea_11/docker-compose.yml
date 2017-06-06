@@ -1,0 +1,23 @@
+version: '2'
+services:
+  mongo:
+    container_name: dockerMongo
+    build:
+      context: dockerMongo
+      dockerfile: Dockerfile
+  app:
+    container_name: dockerApp
+    build:
+      context: dockerApp
+      dockerfile: Dockerfile
+    links:
+      - mongo
+  apache:
+    container_name: dockerApache
+    build:
+      context: dockerApache
+      dockerfile: Dockerfile
+    links:
+      - app
+    ports:
+      - '80:80'

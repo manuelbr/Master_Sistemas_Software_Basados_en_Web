@@ -1,2 +1,8 @@
-Django>=1.8,<2.0
-psycopg2
+Django==1.11.1
+pymongo==2.8
+mongoengine==0.13.0
+Pillow==4.1.1
+lxml==3.7.3
+django-registration-redux==1.6
+djangorestframework==3.6.3
+django-rest-framework-mongoengine==3.3.1

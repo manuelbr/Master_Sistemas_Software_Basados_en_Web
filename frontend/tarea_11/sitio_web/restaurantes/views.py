@@ -19,9 +19,6 @@ from forms import *
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-#Conecto con la base de datos de mongo (previamente cargada)
-connect('restaurantes', host='localhost', port=27017)
-
 #Obtengo una instancia del logger que usaré
 logger = logging.getLogger(__name__)
 
