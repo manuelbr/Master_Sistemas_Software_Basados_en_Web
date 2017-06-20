@@ -5,6 +5,7 @@ from __future__ import print_function
 from flask import Flask, render_template, make_response, request, session, redirect, url_for
 import sys
 from mongoengine import *
+from lxml import etree
 
 #Especifico el nombre y la localización de la carpeta de recursos estáticos
 app = Flask(__name__,static_url_path='')
@@ -98,23 +99,62 @@ def buscar():
         respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
         return respuesta
     else:
-        termino = request.form['term']
-        lista = []
-        #collection = db['restaurants']
-        #print(collection.,file=sys.stderr)
-        for res in restaurants:
-            print(po.name,file=sys.stderr)
-            lista.append(po.name)
-        respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',content=lista, muestraResultado='si'))
-        respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
-        return respuesta
+        restaurante = request.form['term']
+        localidad = request.form['localidad']
+        str_url = 'http://maps.googleapis.com/maps/api/geocode/xml?address='
+        r = str_url + restaurante + localidad
+        tree = etree.parse(r)
+        dire = tree.xpath('//formatted_address/text()')
+        lat = tree.xpath('//location/lat/text()')
+        lon = tree.xpath('//location/lng/text()')
 
-#Página que lista todos los restaurantes por su nombre.
+        if len(dire) != 0:
+            respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',nombre=restaurante,dire=dire[0],lat=lat,lon=lon, muestraResultado='si'))
+            respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
+            return respuesta
+        else:
+            respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',error='No se ha encontrado el restaurante', muestraResultado='si'))
+            respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
+            return respuesta
+
+#Página que lista los 10 primeros restaurantes de la base de datos en mongo.
 @app.route('/listar')
 def listar():
     lista = []
-    for res in restaurants.objects[:3]:
-        lista.append(res.name)
+
+    #Datos de los restaurantes a insertar
+    restaurantes = ['Los Frutales','El Patio Andaluz','Bar Almudena','Bar Chorrohumo']
+    localidades = ['Ogíjares','La Zubia','El Zaidín', 'Alhendín']
+    str_url = 'http://maps.googleapis.com/maps/api/geocode/xml?address='
+    sentinel = 0
+
+    #Inserción de los restaurantes
+    for rest in restaurantes:
+        r = str_url + rest.replace(" ","+") +"+"+localidades[sentinel].replace(" ","+")
+        tree = etree.parse(r)
+        zipcode = tree.xpath('//address_component[type = "postal_code"]/long_name/text()')
+        street = tree.xpath('//address_component[type = "route"]/long_name/text()')
+        number = tree.xpath('//address_component[type = "street_number"]/long_name/text()')
+        localidad = tree.xpath('//address_component[type = "locality"]/long_name/text()')
+        city = tree.xpath('//address_component[type = "administrative_area_level_2"]/long_name/text()')
+        lat = tree.xpath('//location/lat/text()')
+        lon = tree.xpath('//location/lng/text()')
+
+        print(r)
+        print("Zipcode "+zipcode[0])
+        print("Calle "+street[0])
+        print("Número "+number[0])
+        print("Localidad "+localidad[0])
+        print("Ciudad "+city[0])
+
+        dir = Direccion(street=street[0]+", "+number[0], city=localidad[0]+", "+city[0],zipcode=int(zipcode[0]), coord=[float(lat[0]),float(lon[0])])  # así están bien
+        r = restaurants(name=rest, cuisine="Granaina", borough=localidades[sentinel], address=dir)
+        r.save()
+        sentinel = sentinel + 1
+
+    #Listado de los cuatro primeros restaurantes, los que hemos introducido
+    for res in restaurants.objects.order_by('restaurant_id')[:4]:
+        lista.append(res)
     respuesta = make_response(render_template('busqueda.html',user=session['user'],titulo='Resultado de la búsqueda',content=lista, muestraResultado='si'))
     respuesta.headers['Content-Type'] = 'text/html; charset=utf-8'
     return respuesta

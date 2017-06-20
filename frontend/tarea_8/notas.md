@@ -1,11 +1,17 @@
-## Notas de tarea 1 frontend
-* En la aplicación que tenemos, hay que resaltar las opciones del menú cuando pasemos el ratón por encima.
-* También podemos crear una pantalla emergente (un modal) que salte con determinado evento (con AJAX).
-* En Jquery, si ponemos $( 'a' ).click(function( event ){ codigo }), ese 'a' se refiere al tipo de enlace de html y css. Siempre podemos tratar con los tipos de datos de html. Por ejemplo $( '#id' ) ó ( '.clase' ). Esto se usa para añadir eventos a los elementos del tipo que especificamos.
-* Para poner que la función que ejecutamos sólo lo haga cuando la página esté cargada del todo (porque jquery es asíncrono como javascript a veces), hay que poner $( document ).ready(function(){}).
-* También podemos modificar el css y el html sobre la marcha. $( 'h1' ).css({ contenido css }). Lo mismo se hace para html pero con la etiqueta html.
-* Lo que hay que hacer e modificar el css en tiempo de ejecución con jquery para que cuando pasemos el ratón por encima de una de las pestañas del menú, se resalte. También se puede usar la opción class=active que ya tenía por tener bootstrap. Podríamos cambiar el html en tiempo de ejecución para añadir y quitar esa clase en función de lo que queramos.
-* Poner también un evento que cuando pase el ratón por un determinado sitio que se haga un console.log('') (la consola que se abre es la del navegador, que hay que abrirla a propósito), un alert que avise que se ha producido el evento con jquery. O bien que cuando pasemos el ratón por el menú, se ponga rojo.
-* $( "#identificador" ).addClass({Añadimos la clase active a ese identificador}). El identificador debería provenir de la plantilla, al cambiar de pestaña.
-* Con ajax puedes hacer que salga una pantalla emergente de algún enlace, conectándose con el servidor y ofreciendo información. Por ejemplo, que cuando pasemos el ratón por el enlace de un restaurante en la lista de enlaces que se muestre en esa ventana emergente el mapa de google maps. Esto se llama modal. Hay que sacar el modal con jquery (jquery.show). En bootstrap puedes obtener los modales como quieras.
-* Para poner que salga el modal podemos poner: $( '#id' ).modal().
+## Notas de la tarea 9 (REST)
+
+* El views.py y los templates no van a hacer falta, ya que se usará la libreria onepage, que usa Ajax para cargar dinámicamente desde el servidor.
+* Ya no funcionará con urls la prágina, sino con una api que hará llamadas a datos específicos, no a páginas completas. La api estará en el navegador y por tanto, el servidor quedará mucho más descargado de trabajo que de otra forma.
+* Priorizar el uso de URIs con estructura de directorios y evitar el paso de variables. https://api/restaurantes/Bar_Pepe en vez de https://api/restaurantes/?name=Bar_Pepe.
+* No hay que usar el codigo del views, ya que la api lo hace todo sola.
+* Lo que hay que hacer es instalar la api que se dice en el guión de prácticas (one page) y hacer que esa api haga las funciones de CRUD, que ya tiene implementadas: Leer, escribir, actualizar y eliminar restaurantes.
+* Ahora, todo el código de creación de restaurantes y subida de imagenes ya no sería necesario, dado que lo hace la api sola.
+* Para trasladar al móvil el uso de la web con la api, se usará React de javascript: una serie de librerias. Es algo parecido a Angular. Hay que seguir los tutoriales que hay en swad.
+* La parte de react se hará la semana que viene. Esta centrarse en la parte de la API.
+
+## Notas de la tarea 9 (REST) terminada
+* Si accedemos a la api con la dirección: http://127.0.0.1:8000/api podemos ver la página principal de la api.
+* Podemos acceder a la colección completa de restaurantes usando la url:http://127.0.0.1:8000/restaurantes/api/restaurants/
+* Podemos acceder a un restaurante de la colección en concreto con la url: http://127.0.0.1:8000/api/restaurants/Nombre_Bar.
+* Se ha modificado la muestra de restaurantes para descargar al servidor de peso y poder usar la api rest, de forma
+que los datos en texto de cada restaurante se cargan de forma asíncrona con ajax.

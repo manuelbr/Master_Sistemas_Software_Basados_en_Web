@@ -4,9 +4,13 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.views.decorators.csrf import csrf_exempt
 from mongoengine import *
 from lxml import etree
+from django.contrib.auth.decorators import login_required
 from tempfile import NamedTemporaryFile
 from shutil import copyfileobj
+from django.views.generic.base import TemplateView
+import time
 import sys, re
+import logging
 from models import *
 from forms import *
 
@@ -18,55 +22,37 @@ sys.setdefaultencoding('utf8')
 #Conecto con la base de datos de mongo (previamente cargada)
 connect('restaurantes', host='localhost', port=27017)
 
-#Página índice por defecto
-@csrf_exempt
-def login(request):
-    if 'user' in request.session:
-        #Si ya hay una sesión iniciada, se redirige a la página principal para que se le de la bienvenida
-        return principal(request=request,user=request.session['user'])
-    elif request.method == 'POST':
-        #Si se reciben los datos de email desde un login anterior, se envian a la página principal y además se registra en la sesión
-        request.session['user'] = request.POST.get('user')
-        return principal(request=request,user=request.POST.get('user'))
-    else:
-        context = {}
-        return render(request,'login.html',context)
+#Obtengo una instancia del logger que usaré
+logger = logging.getLogger(__name__)
 
 #Página principal que da la bienvenida al usuario
-def principal(request,user):
-    context = {
-        'user' : user,
-    }
+@login_required
+def principal(request):
+    context = {}
     return render(request,'principal.html',context)
 
 #Página que muestra un texto y hereda de la principal
 def muestraTexto(request):
     context = {
-        'user' : request.session['user'],
         'titulo' : 'Esto es un titulo',
         'contenido' : 'Esto es una línea de texto plano',
     }
+    logger.info(time.strftime("%H:%M:%S")+" se ha mostrado el texto")
     return render(request,'muestraTexto.html',context)
 
 #Página que muestra una imagen y hereda de la principal
 def muestraImagen(request):
     context = {
-        'user' : request.session['user'],
         'titulo' : 'Titulo de la imagen',
-
     }
-    return render(request,'muestraImagen.html',context)
 
-#Se deslogea al usuario de la sesión en la que se encuentra
-def logout(request):
-    request.session.pop('user', None)
-    return redirect('/restaurantes')
+    logger.info(time.strftime("%H:%M:%S")+" se ha mostrado la imagen")
+    return render(request,'muestraImagen.html',context)
 
 #Página que muestra el formulario de búsqueda avanzada.
 def busqueda(request):
-    context = {
-        'user' : request.session['user'],
-    }
+    context = {}
+    logger.info(time.strftime("%H:%M:%S")+" se ha accedido al formulario de búsqueda")
     return render(request,'busqueda.html',context)
 
 def handle_uploaded_file(f):
@@ -96,21 +82,19 @@ def insertar(request):
 
             form = restaurantsForm()
             context = {
-                'user' : request.session['user'],
                 'titulo' : 'Insertar un restaurante',
                 'form' : form,
             }
+            logger.info(time.strftime("%H:%M:%S")+" se ha insertado un restaurante")
             return render(request,'insertar.html',context)
         else:
             context = {
-                'user' : request.session['user'],
                 'form' : form,
             }
             return render(request,'insertar.html',context)
     else:
         form = restaurantsForm()
         context = {
-            'user' : request.session['user'],
             'titulo' : 'Insertar un restaurante',
             'form' : form,
         }
@@ -121,10 +105,10 @@ def res_details(request,resid):
     resultado = restaurants.objects(restaurant_id = ide).first()
 
     context = {
-        'user' : request.session['user'],
         'restaurante' : resultado,
         'imagen' : resultado.imagen.read().encode("base64")
     }
+    logger.info(time.strftime("%H:%M:%S")+" se ha accedido a los detalles de un restaurante")
     return render(request,'res_details.html',context)
 
 
@@ -140,21 +124,21 @@ def muestraResultado(request):
 
             #Todas las posibilidades de rellenado del formulario
             if name == "" and cuisine != "" and locality != "":
-                resultado = restaurants.objects(cuisine=re.compile(cuisine, re.IGNORECASE), address={'city':re.compile(locality, re.IGNORECASE)})
+                resultado = restaurants.objects(cuisine=re.compile(cuisine, re.IGNORECASE), city = re.compile(locality, re.IGNORECASE))
             elif name == "" and cuisine == "" and locality != "":
-                resultado = restaurants.objects(address={'city':re.compile(locality, re.IGNORECASE)})
+                resultado = restaurants.objects(city = re.compile(locality, re.IGNORECASE))
             elif name == "" and cuisine == "" and locality == "":
                 resultado = restaurants.objects
             elif name == "" and cuisine != "" and locality == "":
                 resultado = restaurants.objects(cuisine=re.compile(cuisine, re.IGNORECASE))
             elif name != "" and cuisine != "" and locality != "":
-                resultado = restaurants.objects(name=re.compile(name, re.IGNORECASE),cuisine=re.compile(cuisine, re.IGNORECASE), address={'city':re.compile(locality, re.IGNORECASE)})
+                resultado = restaurants.objects(name=re.compile(name, re.IGNORECASE),cuisine=re.compile(cuisine, re.IGNORECASE), city = re.compile(locality, re.IGNORECASE))
             elif name != "" and cuisine == "" and locality == "":
                 resultado = restaurants.objects(name=re.compile(name, re.IGNORECASE))
             elif name != "" and cuisine != "" and locality == "":
                 resultado = restaurants.objects(name = re.compile(name, re.IGNORECASE),cuisine=re.compile(cuisine, re.IGNORECASE))
             elif name != "" and cuisine == "" and locality != "":
-                resultado = restaurants.objects(name = re.compile(name, re.IGNORECASE),address={'city':re.compile(locality, re.IGNORECASE)})
+                resultado = restaurants.objects(name = re.compile(name, re.IGNORECASE),city = re.compile(locality, re.IGNORECASE))
         else:
             resultado = restaurants.objects(name=re.compile(term, re.IGNORECASE))
 
@@ -162,9 +146,9 @@ def muestraResultado(request):
             lista.append(r)
 
         context = {
-            'user' : request.session['user'],
             'lista': lista,
         }
+        logger.info(time.strftime("%H:%M:%S")+" se ha buscado un restaurante a través del formulario completo")
         return render(request,'muestraResultado.html',context)
 
 #Página que lista los 10 primeros restaurantes de la base de datos en mongo.
@@ -176,9 +160,13 @@ def listar(request):
         lista.append(res)
 
     context = {
-        'user' : request.session['user'],
         'titulo' : 'Listado',
         'content' : lista,
         'muestraResultado': 'si',
     }
+    logger.info(time.strftime("%H:%M:%S")+" se ha mostrado el listado de restaurantes")
     return render(request,'listar.html',context)
+
+
+class IndexView(TemplateView):
+    template_name = 'index.html'

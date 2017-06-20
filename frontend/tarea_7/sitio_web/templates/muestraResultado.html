@@ -14,9 +14,7 @@
         <div class="jumbotron">
           <h1>Resultados de la búsqueda</h1>
           {% for lis in lista %}
-            {% with "restaurante/"|add:lis.name as dir %}
-              <p class="lead"><a href= {{ dir.split|join:"+" }}>{{ lis.name }}</a></p>
-            {% endwith %}  
+            <p class="lead"><a href= {{ lis.restaurant_id }}>{{ lis.name }}</a></p>
             <p class="lead">Direccion: {{ lis.street }}. {{lis.city}}</p>
             <p class="lead">Tipo de cocina: {{ lis.cuisine }}</p>
           </br>

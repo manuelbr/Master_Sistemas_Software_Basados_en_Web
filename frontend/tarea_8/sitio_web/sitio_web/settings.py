@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'restaurantes',
     'registration',
+    'rest_framework',
+    'rest_framework_mongoengine',
 ]
 
 REGISTRATION_OPEN = True                # If True, users can register
